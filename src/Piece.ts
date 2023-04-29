@@ -46,7 +46,7 @@ class Piece implements IPiece {
   constructor(public scene: Phaser.Scene, public blocksize: number) {
     this.pieces = [];
   }
-  typeId = this.randomizeTetrominoType(shapes.length - 1);
+  typeId = this.randomizeTetrominoType(shapes.length);
   shape: any[][] = shapes[this.typeId];
   x = 5;
   y = 0;
