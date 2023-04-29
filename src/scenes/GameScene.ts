@@ -8,6 +8,7 @@ class GameScene extends Phaser.Scene {
   board!: Board;
   fps!: Phaser.GameObjects.Text;
   textScore!: Phaser.GameObjects.Text;
+  camera!: Phaser.Cameras.Scene2D.Camera;
   constructor() {
     super("game-scene");
   }
@@ -25,6 +26,9 @@ class GameScene extends Phaser.Scene {
       scene: this,
     });
     this.board.reset();
+    this.camera = this.cameras
+      .add(0, 0, this.width, this.height, true)
+      .setOrigin(0, 0);
   }
   create() {
     new Button(this, {
