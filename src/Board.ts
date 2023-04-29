@@ -51,7 +51,7 @@ class Board implements IBoard, IBoardConfig {
         piece = this.moves.down(piece);
       }
       this.drop();
-      this.scene.camera.shake(100, 0.005);
+      this.scene.camera.shake(100, 0.01);
       this.scene.game.loop.time = 0;
       return piece;
     },
