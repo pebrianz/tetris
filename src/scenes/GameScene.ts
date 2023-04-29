@@ -5,21 +5,23 @@ import Button from "../Button";
 class GameScene extends Phaser.Scene {
   width!: number;
   height!: number;
-  fps!: Phaser.GameObjects.Text;
   board!: Board;
+  fps!: Phaser.GameObjects.Text;
+  textScore!: Phaser.GameObjects.Text;
   constructor() {
     super("game-scene");
   }
-  cols = 12;
-  rows = 20;
-  blocksize = 20;
+  COLS = 12;
+  ROWS = 20;
+  BLOCKSIZE = 20;
+  SCORE = 0;
   init() {
     this.width = this.game.config.width as number;
     this.height = this.game.config.height as number;
     this.board = new Board({
-      cols: this.cols,
-      rows: this.rows,
-      blocksize: this.blocksize,
+      cols: this.COLS,
+      rows: this.ROWS,
+      blocksize: this.BLOCKSIZE,
       scene: this,
     });
     this.board.reset();
@@ -65,17 +67,34 @@ class GameScene extends Phaser.Scene {
       (event: "left" | "right" | "down" | "up" | "rotate") => {
         let p = this.board.moves[event](this.board.piece);
         if (this.board.valid(p)) {
+          this.board.piece.destroy();
           this.board.piece.move(p);
         }
       }
     );
+    this.board.drawbg();
     this.board.draw();
-    this.fps = this.add
-      .text(40, 75, "", {
-        font: "600 1rem sans-serif",
-        color: "#ff0000",
+    this.add
+      .text(this.board.width + 24, 12, "SCORE", {
+        font: "800 12px sans-serif",
+        color: "#2e2e2e",
       })
-      .setDepth(10);
+      .setDepth(10)
+      .setOrigin(0);
+    this.textScore = this.add
+      .text(this.board.width + 24, 28, "", {
+        font: "800 12px sans-serif",
+        color: "#2e2e2e",
+      })
+      .setDepth(10)
+      .setOrigin(0);
+    this.fps = this.add
+      .text(12, 12, "", {
+        font: "600 12px sans-serif",
+        color: "#ffffff",
+      })
+      .setDepth(10)
+      .setOrigin(0);
   }
   update() {
     let time = this.game.loop.time;
@@ -83,7 +102,7 @@ class GameScene extends Phaser.Scene {
       this.board.drop();
       this.game.loop.time = 0;
     }
-
+    this.textScore.setText(`${this.SCORE}`);
     const fps = this.game.loop.actualFps.toFixed();
     this.fps.setText(`FPS: ${fps}`);
   }

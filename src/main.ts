@@ -12,7 +12,7 @@ const config: Phaser.Types.Core.GameConfig = {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
-  scene: GameScene,
+  scene: [GameScene],
 };
 
 export default new Phaser.Game(config);

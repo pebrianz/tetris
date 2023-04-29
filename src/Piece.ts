@@ -9,32 +9,67 @@ export interface IPiece {
   draw: () => void;
 }
 
+const shapes = [
+  [
+    [0, 0, 0, 0],
+    [1, 1, 1, 1],
+    [0, 0, 0, 0],
+  ],
+  [
+    [1, 1, 1],
+    [1, 0, 0],
+  ],
+  [
+    [1, 1, 1],
+    [0, 1, 0],
+  ],
+  [
+    [1, 1, 1],
+    [0, 0, 1],
+  ],
+  [
+    [1, 1, 0],
+    [0, 1, 1],
+  ],
+  [
+    [0, 1, 1],
+    [1, 1, 0],
+  ],
+  [
+    [1, 1],
+    [1, 1],
+  ],
+];
+
 class Piece implements IPiece {
   pieces: Phaser.GameObjects.Rectangle[];
   constructor(public scene: Phaser.Scene, public blocksize: number) {
     this.pieces = [];
   }
-  shape: any[][] = [
-    [2, 0, 0],
-    [2, 2, 2],
-    [0, 0, 0],
-  ];
+  typeId = this.randomizeTetrominoType(shapes.length - 1);
+  shape: any[][] = shapes[this.typeId];
   x = 5;
   y = 0;
-  move(p: IPiece) {
+  randomizeTetrominoType(noOfTypes: number) {
+    return Math.floor(Math.random() * noOfTypes);
+  }
+  destroy() {
     this.shape.forEach((row) => {
       row.forEach((v) => {
-        if (v !== 0) {
+        if (v instanceof Phaser.GameObjects.Rectangle) {
           v.destroy();
         }
       });
     });
+  }
+  move(p: IPiece) {
     this.x = p.x;
     this.y = p.y;
     this.shape = p.shape;
     this.draw();
   }
   draw() {
+    this.destroy();
     this.shape.forEach((row, y) => {
       row.forEach((v, x) => {
         if (v !== 0) {
@@ -47,7 +82,8 @@ class Piece implements IPiece {
               0xffffff
             )
             .setStrokeStyle(1)
-            .setOrigin(0);
+            .setOrigin(0)
+            .setDepth(2);
         }
       });
     });
